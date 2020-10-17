@@ -1,15 +1,34 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Dimensions, Text, Alert } from 'react-native';
 
 import { useNavigation} from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
 import MapView, { MapEvent, Marker } from 'react-native-maps';
+import { getCurrentPositionAsync, requestPermissionsAsync } from 'expo-location';
 
 import mapMarkerImg from '../../images/map-marker.png';
 
 export default function SelectMapPosition() {
   const navigation = useNavigation();
   const [position, setPosition] = useState({ latitude: 0, longitude: 0 })
+	const [initialPosition, setInitialPosition] = useState<[number, number]>([0, 0])
+
+  useEffect(() => {
+    async function loadPosition() {
+      const {status} = await requestPermissionsAsync()
+      
+      if(status !== 'granted') {
+        Alert.alert('Precisamos de sua permição para obter a localização.')
+        return
+      }
+
+      const location = await getCurrentPositionAsync()
+      const {latitude, longitude} = location.coords
+      setInitialPosition([latitude, longitude])
+    }
+
+    loadPosition()
+  }, [])
 
   function handleNextStep() {
     navigation.navigate('OrphanageData', { position });
@@ -21,23 +40,25 @@ export default function SelectMapPosition() {
 
   return (
     <View style={styles.container}>
-      <MapView 
-        initialRegion={{
-          latitude: -20.0035886,
-          longitude: -43.9722806,
-          latitudeDelta: 0.008,
-          longitudeDelta: 0.008,
-        }}
-        style={styles.mapStyle}
-        onPress={handleSelectMapPosition}
-      >
-        {position.latitude !== 0 && (
-          <Marker 
-            icon={mapMarkerImg}
-            coordinate={{ latitude: position.latitude, longitude: position.longitude }}
-          />
-        )}
-      </MapView>
+      {initialPosition[0] !== 0 && (
+        <MapView 
+          initialRegion={{
+            latitude: initialPosition[0],
+            longitude: initialPosition[1],
+            latitudeDelta: 0.008,
+            longitudeDelta: 0.008,
+          }}
+          style={styles.mapStyle}
+          onPress={handleSelectMapPosition}
+        >
+          {position.latitude !== 0 && (
+            <Marker 
+              icon={mapMarkerImg}
+              coordinate={{ latitude: position.latitude, longitude: position.longitude }}
+            />
+          )}
+        </MapView>
+      )}
       {position.latitude !== 0 && (
         <RectButton style={styles.nextButton} onPress={handleNextStep}>
           <Text style={styles.nextButtonText}>Próximo</Text>

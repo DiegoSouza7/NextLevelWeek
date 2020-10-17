@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, View, Dimensions, Alert } from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { useNavigation, useFocusEffect  } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
+import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location'
 import { Feather } from '@expo/vector-icons'
 
 import mapMarker from '../images/map-marker.png'
@@ -17,7 +18,25 @@ interface Orphanage {
 
 export default function OrphanagesMap() {
   const [orphanages, setOrphanages] = useState<Orphanage[]>([]);
+	const [initialPosition, setInitialPosition] = useState<[number, number]>([0, 0])
   const navigation = useNavigation();
+
+  useEffect(() => {
+    async function loadPosition() {
+      const {status} = await requestPermissionsAsync()
+      
+      if(status !== 'granted') {
+        Alert.alert('Precisamos de sua permição para obter a localização.')
+        return
+      }
+
+      const location = await getCurrentPositionAsync()
+      const {latitude, longitude} = location.coords
+      setInitialPosition([latitude, longitude])
+    }
+
+    loadPosition()
+  }, [])
 
   useFocusEffect(() => {
     api.get('orphanages').then(response => {
@@ -35,37 +54,39 @@ export default function OrphanagesMap() {
 
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        initialRegion={{
-          latitude: -19.998084,
-          longitude: -43.9641374,
-          latitudeDelta: 0.008,
-          longitudeDelta: 0.008
-        }}
-      >
-        {orphanages.map(orphanage => (
-          <Marker
-            key={orphanage.id}
-            icon={mapMarker}
-            coordinate={{
-              latitude: orphanage.latitude,
-              longitude: orphanage.longitude
-            }}
-            calloutAnchor={{
-              x: 2.7,
-              y: 0.8
-            }}
-          >
-            <Callout tooltip={true} onPress={() => handleNavigateToOrphanageDetails(orphanage.id)} >
-              <View style={styles.calloutContainer}>
-              <Text style={styles.calloutText}>{orphanage.name}</Text>
-              </View>
-            </Callout>
-          </Marker>
-        ))}
-      </MapView>
+      {initialPosition[0] !== 0 && (
+        <MapView
+          style={styles.map}
+          provider={PROVIDER_GOOGLE}
+          initialRegion={{
+            latitude: initialPosition[0],
+            longitude: initialPosition[1],
+            latitudeDelta: 0.008,
+            longitudeDelta: 0.008
+          }}
+        >
+          {orphanages.map(orphanage => (
+            <Marker
+              key={orphanage.id}
+              icon={mapMarker}
+              coordinate={{
+                latitude: orphanage.latitude,
+                longitude: orphanage.longitude
+              }}
+              calloutAnchor={{
+                x: 2.7,
+                y: 0.8
+              }}
+            >
+              <Callout tooltip={true} onPress={() => handleNavigateToOrphanageDetails(orphanage.id)} >
+                <View style={styles.calloutContainer}>
+                <Text style={styles.calloutText}>{orphanage.name}</Text>
+                </View>
+              </Callout>
+            </Marker>
+          ))}
+        </MapView>
+      )}
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>{orphanages.length} Orfanatos encontrados</Text>

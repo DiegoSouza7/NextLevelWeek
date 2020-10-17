@@ -1,0 +1,198 @@
+.page {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  width: 100vw;
+  height: 100vh;
+}
+
+.page .showIcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background: linear-gradient(329.54deg, #29B6D1 0%, #00C7C7 100%);
+}
+
+.page .showIcon .icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page .showIcon .icon img.imageIcon {
+  width: 150px;
+  height: 150px;
+}
+
+.page .showIcon .icon h1.nameIcon {
+  font-size: 96px;
+}
+
+.page .showIcon .cityState {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page .showIcon .cityState .city {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.page .showIcon .cityState .state {
+  font-size: 26px;
+}
+
+
+/* Form */
+
+.formLogin {
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.formLogin .back {
+  position: absolute;
+  left: 93.68%;
+  right: 2.99%;
+  top: 4.88%;
+  bottom: 89.27%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  background: #EBF2F5;
+  transition: 200ms;
+}
+
+.formLogin .back:hover {
+  background: #d6e8f0;
+}
+
+/* form */
+
+.formLogin form fieldset {
+  border: 0;
+  width: 360px;
+  height: 600px;
+}
+
+.formLogin form fieldset legend {
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 32px;
+  line-height: 34px;
+  color: #5C8599;
+}
+
+/* button */
+
+.formLogin form fieldset button[type="submit"] {
+  margin-top: 20px;
+  width: 100%;
+  height: 64px;
+  background: #37C77F;
+  border: 1px solid #37C77F;
+  border-radius: 20px;
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 22px;
+  color: #FFFFFF;
+  text-align: center;
+  cursor: pointer;
+  transition: 200ms;
+}
+
+.formLogin form fieldset button[type="submit"]:hover {
+  background: #27b46e;
+}
+
+/* input-block */
+
+.formLogin form fieldset .input-block {
+  margin-top: 20px;
+}
+
+
+.formLogin form fieldset .input-block label {
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: #8FA7B3;
+  margin-top: 20px;
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.formLogin form fieldset .input-block input {
+  height: 64px;
+  width: 100%;
+  padding: 0 16px;
+  border: 1px solid #D3E2E5;
+  border-radius: 20px;
+  box-sizing: border-box;
+  color: #5C8599;
+  background: #F5F8FA;
+  outline: none;
+}
+
+/* checkAndForgotPassword */
+
+.formLogin form fieldset .checkAndForgotPassword {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.formLogin form fieldset .checkAndForgotPassword .toForgotPassword {
+  text-decoration: none;
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: #8FA7B3;
+}
+
+.formLogin form fieldset .checkAndForgotPassword .checkbox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.formLogin form fieldset .checkAndForgotPassword .checkbox label {
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: #8FA7B3;
+  margin-left: 15px;
+}
+
+.formLogin form fieldset .checkAndForgotPassword .checkbox #remember[type='checkbox'] {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #D3E2E5;
+  box-sizing: border-box;
+}
+
+.formLogin form fieldset .checkAndForgotPassword .checkbox #remember[type='checkbox']:checked {
+  border: 2px solid #37C77F;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background: #37C77F;
+  color: #37C77F;
+}

@@ -18,6 +18,14 @@ interface Orphanage {
 
 function OrphanagesMap() {
   const [orphanages, setOrphanages] = useState<Orphanage[]>([])
+	const [initialPosition, setInitialPosition] = useState<[number, number]>([0, 0])  
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(position => {
+      const { latitude, longitude } = position.coords
+      setInitialPosition([latitude, longitude])
+    })
+  }, [])
 
   useEffect(() => {
     api.get('/orphanages').then(response => {
@@ -40,7 +48,7 @@ function OrphanagesMap() {
         </footer>
       </aside>
 
-      <Map center={[-20.00282,-43.9719258]} zoom={15} style={{width: '100%', height: '100%'}}>
+      <Map center={initialPosition} zoom={15} style={{width: '100%', height: '100%'}}>
         <TileLayer url="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {orphanages.map(orphanage => (
           <Marker key={orphanage.id} icon={MapIcon} position={[orphanage.latitude, orphanage.longitude]}>
