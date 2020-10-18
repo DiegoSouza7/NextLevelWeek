@@ -5,6 +5,50 @@
   display: flex;
 }
 
+#page-map .loginName {
+  position: absolute;
+  display: flex;
+}
+
+#page-map .loginName button {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  background: #1093aa;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 120px;
+  margin-top: 10px;
+}
+
+#page-map .loginName button:hover {
+  background: #17D6EB;
+}
+
+#page-map .loginName a.toDashboardUserName {
+  margin-left: 80px;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 36px;
+  text-decoration: none;
+  line-height: 42px;
+  color: white;
+}
+
+#page-map .loginName a.tologin {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 42px;
+  margin-top: 10px;
+  text-decoration: none;
+  color: white;
+  margin-left: 80px;
+}
+
 #page-map aside {
   width: 440px;
   background: linear-gradient(329.54deg, #29B6D1 0%, #00C7C7 100%);

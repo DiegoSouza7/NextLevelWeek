@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Map, Marker, TileLayer } from 'react-leaflet';
 import { LeafletMouseEvent } from "leaflet";
@@ -21,6 +21,26 @@ export default function CreateOrphanage() {
   const [open_on_weekends, setOpenOnWeekends] = useState(true)
   const [images, setImages] = useState<File[]>([])
   const [previewImages, setPreviewImages] = useState<string[]>([])
+
+  const Authorization = (localStorage.getItem('Authorization') || sessionStorage.getItem('Authorization'))
+
+  useEffect(() => {
+    if(Authorization) {
+      api.get('Auth', {
+				headers: {
+					Authorization
+				}
+			}).then(response => {
+        if(response.data === true) return 
+			}).catch(err => {
+        localStorage.clear()
+        sessionStorage.clear()
+				return history.push('/')
+			})
+    } else {
+      return
+    }
+	}, [Authorization, history])
 
   function handleMapClick(event: LeafletMouseEvent) {
     const { lat, lng} = event.latlng
@@ -64,7 +84,11 @@ export default function CreateOrphanage() {
       data.append('images', image)
     })
 
-    await api.post('orphanages', data)
+    await api.post('orphanages', data, {
+      headers: {
+        Authorization
+      }
+    })
 
     alert('Cadastro realizado com sucesso!')
     history.push('/app')

@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class createImages1602618449655 implements MigrationInterface {
+export class createUsers1603049732007 implements MigrationInterface {
 
 	public async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.createTable(new Table({
-			name: 'images',
+			name: 'users',
 			columns: [
 				{
 					name: 'id',
@@ -15,29 +15,31 @@ export class createImages1602618449655 implements MigrationInterface {
 					generationStrategy: 'increment'
 				},
 				{
-				name: 'path',
-				type: 'varchar'
+					name: 'name',
+					type: 'varchar'
 				},
 				{
-					name: 'orphanage_id',
-					type: 'integer'
-				}
-			],
-			foreignKeys: [
+					name: 'email',
+					type: 'varchar'
+				},
 				{
-					name: 'ImageOrphanage',
-					columnNames: ['orphanage_id'],
-					referencedTableName: 'orphanages',
-					referencedColumnNames: ['id'],
-					onUpdate: 'CASCADE',
-					onDelete: 'CASCADE'
+					name: 'password',
+					type: 'varchar'
+				},
+				{
+					name: 'reset_token',
+					type: 'varchar',
+				},
+				{
+					name: 'reset_token_expires',
+					type: 'varchar',
 				}
 			]
 		}))
 	}
 
 	public async down(queryRunner: QueryRunner): Promise<void> {
-		await queryRunner.dropTable('images')
+		await queryRunner.dropTable('users')
 	}
 
 }

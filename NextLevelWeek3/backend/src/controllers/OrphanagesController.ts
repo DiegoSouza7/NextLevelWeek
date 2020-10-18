@@ -5,35 +5,16 @@ import orphanageView from '../views/orphanages_view'
 import * as Yup from 'yup'
 
 export default {
-  async index (req: Request, res: Response) {
-    const orphanagesRepository = getRepository(Orphanage)
-
-    const orphanages = await orphanagesRepository.find({
-      relations: ['images']
-    })
-
-    return res.json(orphanageView.renderMany(orphanages))
-  },
-  async show (req: Request, res: Response) {
-    const  { id } = req.params
-
-    const orphanagesRepository = getRepository(Orphanage)
-
-    const orphanage = await orphanagesRepository.findOneOrFail(id, {
-      relations: ['images']
-    })
-
-    return res.json(orphanageView.render(orphanage))
-  },
   async create (req: Request, res: Response) {
-    const {
+    let {
       name,
       latitude,
       longitude,
       about,
       instructions,
       opening_hours,
-      open_on_weekends
+      open_on_weekends,
+      aprovad= ''
     } = req.body
   
     const orphanagesRepository = getRepository(Orphanage)
@@ -52,7 +33,8 @@ export default {
       instructions,
       opening_hours,
       open_on_weekends: open_on_weekends === 'true',
-      images
+      images,
+      aprovad
     }
 
     const schema = Yup.object().shape({
@@ -80,5 +62,25 @@ export default {
     await orphanagesRepository.save(orphanage)
   
     return res.status(201).json(orphanage)
-  }
+  },
+  async index (req: Request, res: Response) {
+    const orphanagesRepository = getRepository(Orphanage)
+
+    const orphanages = await orphanagesRepository.find({
+      relations: ['images']
+    })
+
+    return res.json(orphanageView.renderMany(orphanages))
+  },
+  async show (req: Request, res: Response) {
+    const  { id } = req.params
+
+    const orphanagesRepository = getRepository(Orphanage)
+
+    const orphanage = await orphanagesRepository.findOneOrFail(id, {
+      relations: ['images']
+    })
+
+    return res.json(orphanageView.render(orphanage))
+  },
 }

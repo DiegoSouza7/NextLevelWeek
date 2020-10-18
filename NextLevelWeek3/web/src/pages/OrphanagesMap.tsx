@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { FiArrowRight, FiPlus } from 'react-icons/fi'
+import { Link, useHistory } from 'react-router-dom'
+import { FiArrowRight, FiPlus, FiPower } from 'react-icons/fi'
 import { Map, Marker, TileLayer, Popup } from 'react-leaflet'
 import api from '../services/api'
 
@@ -16,9 +16,21 @@ interface Orphanage {
   name: string
 }
 
+interface User {
+  id: number
+  name: string
+  email: string
+}
+
 function OrphanagesMap() {
+	const history = useHistory()
   const [orphanages, setOrphanages] = useState<Orphanage[]>([])
-	const [initialPosition, setInitialPosition] = useState<[number, number]>([0, 0])  
+  const [initialPosition, setInitialPosition] = useState<[number, number]>([0, 0])
+  const [tokenIsValid, setTokenIsValid] = useState<boolean>(false)
+  const [user, setUser] = useState<User>()
+
+  const Authorization = (localStorage.getItem('Authorization') || sessionStorage.getItem('Authorization'))
+  
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(position => {
@@ -28,13 +40,63 @@ function OrphanagesMap() {
   }, [])
 
   useEffect(() => {
+    if(Authorization) {
+      api.get('Auth', {
+				headers: {
+					Authorization
+				}
+			}).then(response => {
+        if(response.data === true) setTokenIsValid(true)
+				return 
+			}).catch(err => {
+        localStorage.clear()
+        sessionStorage.clear()
+				return
+			})
+    } else {
+      return
+    }
+	}, [Authorization, history])
+
+  useEffect(() => {
     api.get('/orphanages').then(response => {
       setOrphanages(response.data)
     })
   }, [])
+
+  useEffect(() => {
+    if(Authorization) {
+      api.get('/users', {
+        headers: {Authorization}
+      }).then(response => {
+        setUser(response.data)
+      })
+    } else {
+      return
+    }
+  }, [Authorization])
+
+  function logout() {
+    localStorage.clear()
+    sessionStorage.clear()
+    history.push('/')
+  }
   
   return (
     <div id="page-map">
+      {user ? (
+        <div className="loginName">
+          <Link className="toDashboardUserName" to="/dashboard">{user?.name}</Link>
+          <button type="button" onClick={logout}>
+            <FiPower size={24} color="#FFF" />
+          </button>
+        </div>
+      ) : (
+        <div className="loginName">
+          <Link className="tologin" to="/login">Faça Login</Link>
+        </div>
+      )}
+
       <aside>
         <header>
           <img src={mapMarkerImg} alt="Happy" />
@@ -61,10 +123,12 @@ function OrphanagesMap() {
           </Marker>
         ))}
       </Map>
-
-      <Link to="/orphanages/create" className="create-orphanage">
-        <FiPlus size={32} color="#FFF" />
-      </Link>
+      
+      {tokenIsValid === true && (
+        <Link to="/orphanages/create" className="create-orphanage">
+          <FiPlus size={32} color="#FFF" />
+        </Link>
+      )}
     </div>
   )
 }

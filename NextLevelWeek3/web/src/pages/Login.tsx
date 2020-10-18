@@ -84,7 +84,7 @@ function Login() {
                 />
                 <label className="nameInput">Lembrar-me</label>
               </div>
-              <Link to="/" className="toForgotPassword">Esqueci minha senha</Link>
+              <Link to="/forgot" className="toForgotPassword">Esqueci minha senha</Link>
             </div>
 
           <button className="submit" type="submit">
