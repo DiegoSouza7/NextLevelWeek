@@ -12,10 +12,10 @@ const upload = multer(uploadConfig)
 
 routes.get('/Auth', Auth)
 
-routes.post('/login', Users.login)
-routes.post('/orphanages', jwt, upload.array('images'), OrphanagesController.create)
 routes.get('/orphanages', OrphanagesController.index)
 routes.get('/orphanages/:id', OrphanagesController.show)
+routes.post('/orphanages', jwt, upload.array('images'), OrphanagesController.create)
+routes.post('/login', Users.login)
 
 routes.get('/users', jwt, Users.show)
 routes.post('/users', Users.create)
