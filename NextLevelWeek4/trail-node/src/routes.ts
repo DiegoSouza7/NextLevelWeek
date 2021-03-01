@@ -22,4 +22,3 @@ router.get('/answers/:value', answerController.execute)
 router.get('/nps/:survey_id', npsController.execute)
 
 export { router }
-
