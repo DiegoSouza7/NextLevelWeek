@@ -4,6 +4,10 @@
   background-color: var(--color-primary);
 }
 
+.teacherForm {
+  margin-top: 27rem;
+}
+
 .page-header .top-bar-container {
   width: 90%;
   margin: 0 auto;

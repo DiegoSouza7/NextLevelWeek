@@ -7,13 +7,14 @@ import backIcon from '../../assets/images/icons/back.svg'
 import './styles.css'
 
 interface PageHeaderProps {
-  title: string
-  description?: string
+  title: string;
+  description?: string;
+  marginTop?: string;
 }
 
 const PageHeader: React.FC<PageHeaderProps> = (props) => {
   return (
-    <header className="page-header" >
+    <header className={`page-header ${props.marginTop}`} >
       <div className="top-bar-container">
         <Link to="/">
           <img src={backIcon} alt="Voltar"/>
